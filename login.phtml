@@ -1,6 +1,5 @@
 <?php
 require_once("zaklad.php");
-require_once (dirname(__DIR__).'/modely/Users.php');
 require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/UvodKontroler.php');
@@ -13,10 +12,15 @@ $smer->zkontroluj(array($_SERVER['REQUEST_URI']));
 echo zaklad::allIn();
 if(!empty($_SESSION['login'])){$smer->prejdi("web2/view/uvod");/*Kontroler::presmeruj("uvod");*/}
 $error=null;
+$smer = $smer->kontroler;
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['sakra']="hej";
-    Users::login($_POST['username'],$_POST['password']);
-if(!empty($_SESSION['login'])){$error=null; $smer->prejdi("web2/view/uvod");/*Kontroler::presmeruj("uvod");*/}
+
+    $smer->login($_POST['username'],$_POST['password']);
+if(!empty($_SESSION['login'])){
+    $error=null;
+    $smer = new SmerovacKontroler();
+    $smer->prejdi("web2/view/uvod");/*Kontroler::presmeruj("uvod");*/}
 else{$error = "Jméno nebo heslo bylo zadáno špatně.";}
 }
 ?>
@@ -39,7 +43,7 @@ else{$error = "Jméno nebo heslo bylo zadáno špatně.";}
                <form action = "" method = "post">
                   <label>Uživatelské jméno  :</label><input type = "text" name = "username" class = "box"/><br /><br />
                   <label>Heslo  :</label><input type = "password" name = "password" class = "box" /><br/><br />
-                  <input type = "submit" value = " Přihlásit "/><br />
+                  <input type = "submit" value = " Přihlásit "/> <a title="Registrovat" href="../view/registrace">Registrovat</a><br />
                </form>
                 <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
 

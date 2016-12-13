@@ -1,15 +1,31 @@
 <?php
+
+/**
+ * Abstraktní trída, kterou všechny ostatní kontrolery extendují.
+ * Vzhledem k tomu, že se ostatní kontrolery liší jen nepatrně, neobsahují dokumentaci (s výjimkou SmerovacKontroler).
+ */
 abstract class Kontroler
 {
-    // Pole, jehož indexy jsou poté viditelné v šabloně jako běžné proměnné
+    /**
+     * @var Pole, jehož indexy jsou poté viditelné v šabloně jako běžné proměnné.
+     */
     protected $data = array();
-    // Název šablony bez přípony
+    /**
+     * @var Název šablony bez přípony
+     */
     protected $pohled = "";
-    // Hlavička HTML stránky
+    /**
+     * @var Hlavička HTML stránky
+     */
     protected $hlavicka = array('titulek' => '', 'klicova_slova' => '', 'popis' => '');
 
-    // Ošetří proměnnou pro výpis do HTML stránky
-    private function osetri($x = null)
+    /**
+     * Ošetří proměnnou pro výpis do HTML stránky.
+     *
+     * @param $x libovolný vstup.
+     * @return ošetřený vstup.
+     */
+    public function osetri($x = null)
     {
         if (!isset($x))
             return null;
@@ -27,7 +43,9 @@ abstract class Kontroler
             return $x;
     }
 
-    // Vyrenderuje pohled
+    /**
+     *Vyrenderuje pohled a přesune na správné URL.
+     */
     public function vypisPohled()
     {
         if ($this->pohled)
@@ -44,7 +62,9 @@ abstract class Kontroler
         }
     }
 
-    // Přesměruje na dané URL
+    /**Přesměruje na dané URL
+     * @param $url
+     */
     public static function presmeruj($url)
     {
         header("Location: $url");
@@ -52,6 +72,9 @@ abstract class Kontroler
         exit;
     }
 
-    // Hlavní metoda controlleru
+    /**Hlavní metoda controlleru.
+     * Zpracovává url a podle ní nastavuje pohled.
+     * @param $parametry zpracovávaná url
+     */
     abstract function zpracuj($parametry);
 }

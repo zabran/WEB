@@ -1,6 +1,13 @@
 <?php
+
+/**
+ * Třída, která vytváří layout stránky.
+ */
 class zaklad{
 
+    /**Vytváří hlavičku stránky.
+     * @return string s hlavičkou stránky.
+     */
     public static function hlavicka(){
 
         $titulek =$_SESSION['titulek'];
@@ -24,12 +31,18 @@ class zaklad{
 
     }
 
+    /**Vytváří footer stránky.
+     * @return string s footerem stránky.
+     */
     public static function spodek(){
       return  '<body><div class="container">'.'<div id="footer">
             Copyright &copy; 2016, <a href="mailto:zabran@students.zcu.cz" title="E-mail autora - Marek Zábran">Marek Zábran</a>
         </div>'.'</div></body>';
     }
 
+    /**Vytváří levé menu pro čtenáře.
+     * @return string obsahující levé menu.
+     */
     public static function leveMenu(){
         if(!empty($_SESSION["login"])){
           return  /*'<body>
@@ -50,6 +63,9 @@ class zaklad{
 
     }
 
+    /**Vytváří string obsahující horní uživatelské menu.
+     * @return string obsahující uživatelské menu.
+     */
     public static function horniMenu(){
         $rule = array("Čtenář", "Spisovatel", "Admin");
 
@@ -78,8 +94,8 @@ class zaklad{
                     <a class="item" href="../view/prispevky" title="Jít na seznam příspěvků">Všechny příspěvky</a>';
                 if($_SESSION["rule"]==3)
                 {
-                    $html=$html . '<a class="item" href="../view/sprava_prispevky" title="Spravovat příspěvky">Správa příspěvků</a>
-                    <a class="item" href="../view/sprava_uzivatele" title="Spravovat uživatele">Správa uživatelů</a>';
+                    $html=$html . '<a class="item" href="../view/sprava_prispevku" title="Spravovat příspěvky">Správa příspěvků</a>
+                    <a class="item" href="../view/sprava_uzivatelu" title="Spravovat uživatele">Správa uživatelů</a>';
                 }
                 $html=$html . '</div>';
             }
@@ -89,6 +105,9 @@ class zaklad{
             return $html;
     }
 
+    /**Vrací část layoutu, kterou lze vytvořit zvlášť.
+     * @return string hlavičky a horního menu.
+     */
     public static function allIn(){
        return self::hlavicka().self::horniMenu()/*.self::leveMenu().self::spodek()*/;
 

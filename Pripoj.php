@@ -1,21 +1,41 @@
 <?php
-
 require_once (dirname(__DIR__).'/inc/db_settings.inc.php');
+
+/**
+ * Základní model, který extendují všechny ostatní modely.
+ * Zde se řeší obecné připojení do databáze a ošetření příkazů.
+ */
 class Pripoj
 {
-    public static $spojeni; 	// tam si ulozim aktualni spojeni
+    /**
+     * @var aktualni spojeni
+     */
+    public static $spojeni;
+    /**
+     * @var int typ spojení - funguje ovšem pouze MYSQL.
+     */
     private static $typ_spojeni = DB_CONNECTION_USE_PDO_MYSQL;
 
+    /**
+     * Při vytvoření se automaticky připojí na databázi.
+     * Vzhledem ke statičnosti nevyužito.
+     */
     function __construct()
     {
         self::Connect();
     }
 
+    /**Vrací napodledy vložené id.
+     * @return naposledy vložené id.
+     */
     protected static function getInsertId()
     {
         return self::$spojeni->lastInsertId();
     }
 
+    /**
+     *Připojení do databáze.
+     */
     static function Connect()
     {
         // připojení k DB provedu dle požadovaného typu
@@ -26,8 +46,6 @@ class Pripoj
                 self::$spojeni = new PDO("mysql:host=" . MYSQL_DATABASE_SERVER . ";dbname=" . MYSQL_DATABASE_NAME . "",
                     MYSQL_DATABASE_USER, MYSQL_DATABASE_PASSWORD, $options);
 
-                // nastavit pripojeni na UTF-8 - pro starsi verze PHP
-                //$this->connection->exec("SET NAMES UTF8");
 
             } catch (PDOException $e) {
                 print "Error!: " . $e->getMessage() . "<br/>";
@@ -36,7 +54,11 @@ class Pripoj
         }
     }
 
-   static function Disconnect()
+    /**
+     *Ukončí spojení.
+     * Vzhledem ke statičnosti modulů nevyužito.
+     */
+    static function Disconnect()
     {
         if (self::$typ_spojeni == DB_CONNECTION_USE_PDO_MYSQL)
             self::$spojeni = null;
@@ -44,7 +66,11 @@ class Pripoj
             oci_close(self::$spojeni); // Oracle
     }
 
-    // Spustí dotaz a vrátí z něj první řádek
+    /**Spustí dotaz a vrátí z něj první řádek.
+     * @param $dotaz tázaný.
+     * @param array $parametry k dotazu.
+     * @return první získaný řádek.
+     */
     public static function dotazJeden($dotaz, $parametry = array()) {
         self::Connect();
         $navrat = self::$spojeni->prepare($dotaz);
@@ -52,7 +78,11 @@ class Pripoj
         return $navrat->fetch();
     }
 
-    // Spustí dotaz a vrátí z něj první řádek
+    /**Spustí dotaz a vrátí ho v nezpracované podobě.
+     * @param $dotaz
+     * @param array $parametry
+     * @return nezpracovaný výsledek dotazu.
+     */
     public static function dotazRow($dotaz, $parametry = array()) {
         self::Connect();
         $navrat = self::$spojeni->prepare($dotaz);
@@ -60,7 +90,11 @@ class Pripoj
         return $navrat;
     }
 
-    // Spustí dotaz a vrátí všechny jeho řádky jako pole asociativních polí
+    /**Spustí dotaz a vrátí všechny jeho řádky jako pole asociativních polí.
+     * @param $dotaz
+     * @param array $parametry
+     * @return pole asiciativních pole jakožto výsledek dotazu.
+     */
     public static function dotazVsechny($dotaz, $parametry = array()) {
         self::Connect();
         $navrat = self::$spojeni->prepare($dotaz);
@@ -68,14 +102,22 @@ class Pripoj
         return $navrat->fetchAll();
     }
 
-    // Spustí dotaz a vrátí z něj první sloupec prvního řádku
+    /**Spustí dotaz a vrátí z něj první sloupec prvního řádku.
+     * @param $dotaz
+     * @param array $parametry
+     * @return první sloupec prvního řádku.
+     */
     public static function dotazSamotny($dotaz, $parametry = array()) {
         self::Connect();
         $vysledek = self::dotazJeden($dotaz, $parametry);
         return $vysledek[0];
     }
 
-    // Spustí dotaz a vrátí počet ovlivněných řádků
+    /**Spustí dotaz a vrátí počet ovlivněných řádků.
+     * @param $dotaz
+     * @param array $parametry
+     * @return počet získaných řádků.
+     */
     public static function dotaz($dotaz, $parametry = array()) {
         self::Connect();
         $navrat = self::$spojeni->prepare($dotaz);

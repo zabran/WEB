@@ -24,18 +24,24 @@ class KomentareKontroler extends Kontroler
 
     }
     public function getArticle(){
-        if($_SESSION["rule"]>0)
-        {return Articles::getById($this->id);}
+        if($_SESSION["rule"]>1)
+        {return $this->osetri(Articles::getById($this->id));}
     }
 
     public function getKomentare(){
-        if($_SESSION["rule"]>0)
-        {return Comments::getByArticle($this->id);}
+        if($_SESSION["rule"]>1)
+        {return $this->osetri(Comments::getByArticle($this->id));}
+        //else error;
+    }
+
+    public function getRating($id){
+        if($_SESSION["rule"]>1)
+        {return $this->osetri(Comments::getRating($id));}
         //else error;
     }
 
     public function insertKoment( $art, $head, $value, $body){
-        if($_SESSION["rule"]>0){
+        if($_SESSION["rule"]>1){
             $user= Users::getByName($_SESSION["login"]);
 Comments::insert($user["id"], $art, $head, $body, $value);
         }

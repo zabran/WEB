@@ -1,16 +1,17 @@
 <?php
-// Router je speciální typ controlleru, který podle URL adresy zavolá
-// správný controller a jím vytvořený pohled vloží do šablony stránky
 require_once('Kontroler.php');
 require_once('LoginKontroler.php');
-require_once('UvodKontroler.php');
-require_once('KomentareKontroler.php');
+/** Smerovac je kontroler typu router - kontroler, který podle URL adresy zavolá
+ správný podkontroler a jím vytvořený pohled uloží.*/
 class SmerovacKontroler extends Kontroler
 {
-    // Instance controlleru
+    /** Instance podkontroleru*/
     public $kontroler;
 
-    // Metoda převede pomlčkovou variantu controlleru na název třídy
+    /** Metoda převede pomlčkovou variantu kontroleru na název třídy.
+     *  @param $text pomlčkovaný text.
+     * @return vypomlčkovaná věta.
+     */
     private function pomlckuj($text)
     {
         $_SESSION["hej0"]= "$text";
@@ -23,7 +24,10 @@ class SmerovacKontroler extends Kontroler
         return $veta;
     }
 
-// Naparsuje URL adresu podle lomítek a vrátí pole parametrů
+/** Naparsuje URL adresu podle lomítek a vrátí pole parametrů.
+ * @param $url parsované url.
+ *  @return vyparsované url.
+ */
     private function parsujURL($url)
     {
         // Naparsuje jednotlivé části URL adresy do asociativního pole
@@ -37,6 +41,9 @@ class SmerovacKontroler extends Kontroler
         return $rozdelenaCesta;
     }
 
+    /** Přejde na nový pohled.
+     * @param $url url, ne kterou se přešlo.
+     */
     public function prejdi($url){
         if(substr($url[0],0,1)=="/") {
             $url[0]=substr($url[0], 1);
@@ -45,7 +52,6 @@ class SmerovacKontroler extends Kontroler
         $url = explode("/", $url);
         $_SESSION["url0"]= "$url[0]";
         $_SESSION["url1"]= "$url[1]";
-        $_SESSION["url2"]= "$url[2]";
 
         $i=0;
         $i2=1;
@@ -81,6 +87,11 @@ class SmerovacKontroler extends Kontroler
         }*/
     }
 
+    /**
+     * Zkontroluje, jestli je nastavený správný pohled,
+     * pokud se neaktivovalo přesměrování na index.
+     * @param $url kontrolovaná.
+     */
     public function zkontroluj($url){
         if(substr($url[0],0,1)=="/")
         {
@@ -96,7 +107,7 @@ class SmerovacKontroler extends Kontroler
             $i++;
         }
         $url3 = $this->pomlckuj($url2[$i2+1]);
-        if(iconv("utf-8", "us-ascii//TRANSLIT",$_SESSION["titulek"])!=$url3){
+        //if(iconv("utf-8", "us-ascii//TRANSLIT",$_SESSION["titulek"])!=$url3){
 
             $tridaKontroleru = $url3 . "Kontroler";
             $_SESSION["tridaKontroleru"]= $tridaKontroleru;
@@ -112,10 +123,12 @@ class SmerovacKontroler extends Kontroler
 
             // Nastavení hlavní šablony
             $this->pohled = $url3;
-        }
+        //}
     }
 
-    // Naparsování URL adresy a vytvoření příslušného controlleru
+    /**Zpracuje URL a buď na ní přejde nebo přejde na login.
+     * @param zpracovávaná $parametry
+     */
     public function zpracuj($parametry)
     {
         $naparsovanaURL = $this->parsujURL($parametry[0]);
@@ -126,8 +139,6 @@ class SmerovacKontroler extends Kontroler
             $this->prejdi($url);
         }
         else{
-        $_SESSION["pars1"]= "$naparsovanaURL[1]";
-        $_SESSION["pars2"]= "$naparsovanaURL[2]";
         $this->prejdi($parametry[0]);}
 
     }

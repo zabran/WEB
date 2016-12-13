@@ -1,0 +1,55 @@
+<?php
+require_once("zaklad.php");
+require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/RegistraceKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/UvodKontroler.php');
+session_start();
+
+//echo zaklad::spodek();
+$smer= new SmerovacKontroler();
+$smer->zkontroluj(array($_SERVER['REQUEST_URI']));
+echo zaklad::allIn();
+$error=null;
+$smer = $smer->kontroler;
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $smer->registrace($_POST['username'],$_POST['password'], $_POST['email']);
+    if(!empty($_SESSION['login'])){
+        $error=null;
+        $smer = new SmerovacKontroler();
+        $smer->prejdi("web2/view/uvod");/*Kontroler::presmeruj("uvod");*/}
+    else{$error = "Již existuje uživatel s tímto jménem.";}
+}
+?>
+
+
+<html>
+
+
+
+<body>
+<h1>Registrace</h1>
+
+<div align = "center">
+    <div style = "width:300px; border: solid 1px #333333; " align = "left">
+        <div style = "background-color:#333333; color:#FFFFFF; padding:3px;"><b>Registrace</b></div>
+
+        <div style = "margin:10px">
+
+            <form action = "" method = "post">
+                <label>Uživatelské jméno  :</label><input type = "text" name = "username" class = "box"/><br /><br />
+                <label>E-mail  :</label><input type = "text" name = "email" class = "box" /><br/><br />
+                <label>Heslo  :</label><input type = "password" name = "password" class = "box" /><br/><br />
+                <input type = "submit" value = " Registrovat "/><br />
+            </form>
+            <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

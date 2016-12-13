@@ -3,11 +3,10 @@ require("zaklad.php");
 require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/PrispevkyKontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
-require_once (dirname(__DIR__).'/modely/Comments.php');
 session_start();
 $smer= new SmerovacKontroler();
 $smer->zkontroluj(array($_SERVER['REQUEST_URI']));
-$smer = new PrispevkyKontroler();
+$smer = $smer->kontroler;
 $sql = $smer->getClanky();
 
 echo zaklad::allIn();
@@ -46,7 +45,7 @@ echo zaklad::allIn();
                         <a href="../view/komentare/'.$clanek["id"].'" title="Zobrazit komentáře">Zobrazit</a>
                     </td>
                     <td>
-                        '. Comments::getRating($clanek["id"])["rating"].'
+                        '. $smer->getRating($clanek["id"])["rating"].'
                     </td>
                 </tr>
                 

@@ -1,7 +1,7 @@
 <?php
 require("zaklad.php");
 require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
-require_once (dirname(__DIR__).'/kontrolery/Moje_prispevkyKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Sprava_prispevkuKontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
 session_start();
 $smer= new SmerovacKontroler();
@@ -10,7 +10,7 @@ $smer = $smer->kontroler;
 $sql = $smer->getClanky();
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $smer->smaz($_POST['user'],$_POST['id']);
+    $smer->smaz($_POST['id']);
     $sql = $smer->getClanky();
 }
 
@@ -29,7 +29,7 @@ echo zaklad::allIn();
         <div id="staticcontent">
 
 
-            <h3>Napsal jste následující články:</h3>
+            <h3>Výpis příspěvků:</h3>
             <table style="width:100%;">
 
                 <thead>
@@ -50,9 +50,8 @@ echo zaklad::allIn();
                     </td>
                     <td>
                          <form action = "" method = "post">
-                         <input type = "hidden" name = "user" value="'. $clanek["user"].'" />
                          <input type = "hidden" name = "id" value="'. $clanek["id"].'" />
-                <input type="submit" class="button small " name="smazat" value="Smazat tento článek" />
+                <input type="submit" class="button small" name="smazat" value="Smazat tento článek" />
                 </form>
                     </td>
                     <td>

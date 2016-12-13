@@ -1,4 +1,5 @@
 <?php
+require_once (dirname(__DIR__).'/modely/Users.php');
 class LoginKontroler extends Kontroler
 {
     public function zpracuj($parametry)
@@ -12,5 +13,9 @@ class LoginKontroler extends Kontroler
 
 
         $this->pohled = 'login';
+    }
+
+    public function login($user, $pas){
+        Users::login($user, $pas);
     }
 }

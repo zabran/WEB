@@ -3,7 +3,6 @@ require("zaklad.php");
 require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/KomentareKontroler.php');
 require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
-require_once (dirname(__DIR__).'/modely/Comments.php');
 session_start();
 $smer= new SmerovacKontroler();
 $smer->zkontroluj(array($_SERVER['REQUEST_URI']));
@@ -40,7 +39,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php
             echo '<h5>'.$art["clanek"].'</h5>
                 <h6>Autoři: '.$art["user"].'</h6>
-                <h7>Hodnocení: '.Comments::getRating($art["id"])["rating"].'</h7>
+                <h7>Hodnocení: '.$smer->getRating($art["id"])["rating"].'</h7>
                 <p title="Popis článku">'.$art["desc"].'</p>
                 <p><a target="_blank" href="../../uploads/'.$art["file"].'" title="Stáhnout příspěvek '.$art["clanek"].'">Stáhnout</a></p>
             </div>';
@@ -64,10 +63,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div style = "margin:10px">
 
                         <form action = "" method = "post">
-                            <label>Nadpis  :</label><input type = "text" name = "head" class = "box"/><br /><br />
-                            <label>Hodnocení  :</label><input type = "number" name = "value" class = "box" style="width: 4em"/><br/><br />
-                            <label style="margin-top: -3rem">Komentář  :</label><textarea name="body" style="height: 200px"></textarea><br/><br />
-                            <input type = "submit" value = " Odeslat "/><br />
+                            <label>Nadpis  <span class="required"></span>:</label><input type = "text" name = "head" class = "box"/><br /><br />
+                            <label>Hodnocení  <span class="required"></span>:</label><input type = "number" name = "value" class = "box" style="width: 4em"/><br/><br />
+                            <label style="margin-top: -3rem">Komentář  <span class="required"></span>:</label><textarea name="body" style="height: 200px"></textarea><br/><br />
+                            <div class="row">
+                                <div class="large-12 columns">
+                                    <span class="required"></span> - povinná položka
+                                    <input type="submit" class="button success float-right" name="save" value="Uložit a odeslat" />
+                                </div>
+                            </div>
                         </form>
 
                     </div>

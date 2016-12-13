@@ -1,0 +1,104 @@
+<?php
+require("zaklad.php");
+require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Sprava_uzivateluKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
+session_start();
+$smer= new SmerovacKontroler();
+$smer->zkontroluj(array($_SERVER['REQUEST_URI']));
+$smer = $smer->kontroler;
+$sql = $smer->getUzivatele();
+$rule = array("Čtenář", "Spisovatel", "Admin");
+//$prav = $_SESSION['rule']-1;
+//$rule = $rule[$prav];
+
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(isset($_POST['rule']))
+    {
+        $smer->setRule($_POST['id'], $_POST['rule']);
+        $sql = $smer->getUzivatele();
+    }
+    else{
+        $smer->smaz($_POST['id']);
+        //TODO
+        $sql = $smer->getUzivatele();
+    }
+}
+
+echo zaklad::allIn();
+
+?>
+
+<html>
+<body>
+<div class="containerful">
+
+    <div class="content nopad">
+        <?php
+        echo zaklad::leveMenu();
+        ?>
+        <div id="staticcontent">
+
+
+            <h3>Výpis uživatelů:</h3>
+            <table style="width:100%;">
+
+                <thead>
+                <tr>
+                    <th>Jméno</th>
+                    <th>Role</th>
+                    <th>E-mail</th>
+                    <th>Nastavit roli</th>
+                    <th>Smazat</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php  foreach ($sql as $user){
+                    echo '<tr>
+                    <td>'. $user["name"].'</td>
+                    <td>
+                        '. $rule[$user["rules_id"]-1].'
+                    </td>
+                    <td>
+                        '. $user["email"].'
+                    </td>
+                    <form action = "" method = "post">
+                    <td><select id="cmbMake" name="rule" >
+                            <option value="1">Čtenář</option>
+                            <option value="2">Spisovatel</option>
+                            <option value="3">Admin</option>
+                        </select><input type="submit" class="button success tiny" name="potvrdit" value="Potvrdit" /></td>
+                        <input type = "hidden" name = "id" value="'. $user["id"].'" />
+                        
+                        </form>
+                    <td>
+                         <form action = "" method = "post">
+                         <input type = "hidden" name = "id" value="'. $user["id"].'" />
+                <input type="submit" class="button" name="smazat" value="Smazat tohoto uživatele" />
+                </form>
+                    </td>
+                    
+                </tr>
+                
+            ';
+                }
+                ?>
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+<?php
+echo zaklad::spodek();
+
+?>
+
+

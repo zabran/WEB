@@ -1,7 +1,92 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dead
- * Date: 10.12.2016
- * Time: 12:48
- */
+require("zaklad.php");
+require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/ProfilKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
+session_start();
+$smer= new SmerovacKontroler();
+$smer->zkontroluj(array($_SERVER['REQUEST_URI']));
+$smer = $smer->kontroler;
+echo zaklad::allIn();
+$rule = array("Čtenář", "Spisovatel", "Admin");
+$prav = $_SESSION['rule']-1;
+$rule = $rule[$prav];
+$error=null;
+$succ=null;
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name =$_POST['name'];
+if(empty($_POST['name'])){$name=$_SESSION["login"];}
+    if($smer->hesloOK($_POST['old'])){
+    $smer->zmenProfil($name, $_POST['new'], $_POST['rule']);
+    $succ="Profil byl změněn";
+    }else{$error="Bylo zadáno špatné heslo.";}
+}
+
+
+?>
+
+<html>
+<body>
+<div class="containerful">
+
+    <div class="content nopad">
+        <?php
+        echo zaklad::leveMenu();
+        ?>
+        <div id="staticcontent">
+
+
+            <h3>Profil:</h3>
+            <h2>Jméno: <?php echo $_SESSION["login"]; ?></h2>
+                <h2>Role: <?php echo $rule; ?></h2>
+
+            <div style = " border: solid 1px #333333; " align = "left">
+                <div style = "background-color:#333333; color:#FFFFFF; padding:3px;"><b>Změnit profil:</b></div>
+
+                <div style = "margin:10px">
+
+                    <form action = "" method = "post" enctype="multipart/form-data">
+                        <label>Nové jméno :</label><input type = "text" name = "name" class = "box"/><br /><br />
+                        <label>Staré heslo  <span class="required"></span>:</label><input type = "text" name = "old" class = "box"/><br /><br />
+                        <label>Nové heslo  <span class="required"></span>:</label><input type = "text" name = "new" class = "box" /><br/><br />
+                        <label>Set pravidel  <span class="required"></span>:</label><select id="cmbMake" name="rule" >
+                            <option value="1">Čtenář</option>
+                            <option value="2">Spisovatel</option>
+                            <option value="3">Admin</option>
+                        </select><br/><br />
+
+                            <div class="pad_24"></div>
+
+                            <div class="row">
+                                <div class="large-12 columns">
+                                    <span class="required"></span> - povinná položka
+                                    <input type="submit" class="button success float-right" name="save" value="Uložit a odeslat" />
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="submit_flag" />
+
+
+
+                    </form>
+                    <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
+                    <div style = "font-size:16px; color:#5aeb86; margin-top:10px"><?php echo $succ; ?></div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+<?php
+echo zaklad::spodek();
+
+?>
+
+

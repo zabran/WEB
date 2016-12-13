@@ -18,7 +18,13 @@ class PrispevkyKontroler extends Kontroler
 
     public function getClanky(){
         if($_SESSION["rule"]>1)
-        {return Articles::getAll();}
+        {return $this->osetri(Articles::getAll());}
+        //else error;
+    }
+
+    public function getRating($id){
+        if($_SESSION["rule"]>1)
+        {return $this->osetri(Comments::getRating($id));}
         //else error;
     }
 }

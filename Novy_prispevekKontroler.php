@@ -18,6 +18,7 @@ class Novy_prispevekKontroler extends Kontroler
 
     public function novyPrispevek($name, $desc, $file){
         if($_SESSION["rule"]>1){
+
             $user = Users::getByName($_SESSION["login"]);
             $id = $user["id"];
             $_SESSION["namicko"]=$id;

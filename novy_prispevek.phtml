@@ -6,7 +6,7 @@ require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
 session_start();
 $smer= new SmerovacKontroler();
 $smer->zkontroluj(array($_SERVER['REQUEST_URI']));
-$smer = new Novy_prispevekKontroler();
+$smer = $smer->kontroler;
 echo zaklad::allIn();
 
 $error=null;
@@ -95,7 +95,7 @@ if(isset($_FILES['uploadfile'])){
 
                         </form>
                         <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
-                        <div style = "font-size:11px; color:#ffff00; margin-top:10px"><?php echo $succ; ?></div>
+                        <div style = "font-size:16px; color:#5aeb86; margin-top:10px"><?php echo $succ; ?></div>
                     </div>
 
                 </div>
