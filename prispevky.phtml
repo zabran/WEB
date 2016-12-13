@@ -1,0 +1,73 @@
+<?php
+require("zaklad.php");
+require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/PrispevkyKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
+require_once (dirname(__DIR__).'/modely/Comments.php');
+session_start();
+$smer= new SmerovacKontroler();
+$smer->zkontroluj(array($_SERVER['REQUEST_URI']));
+$smer = new PrispevkyKontroler();
+$sql = $smer->getClanky();
+
+echo zaklad::allIn();
+
+?>
+
+<html>
+<body>
+<div class="containerful">
+
+    <div class="content nopad">
+        <?php
+        echo zaklad::leveMenu();
+        ?>
+        <div id="staticcontent">
+
+
+            <h3>K dispozici jsou následující články:</h3>
+            <table style="width:100%;">
+
+                <thead>
+                <tr>
+                    <th>Název</th>
+                    <th>Autor</th>
+                    <th>Komentáře</th>
+                    <th>Rating</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php  foreach ($sql as $clanek){
+                    $_SESSION["komentáře"]='komentare/?id='.$clanek["id"];
+               echo '<tr>
+                    <td>'. $clanek["clanek"].'</td>
+                    <td>'. $clanek["user"].'</td>
+                    <td>
+                        <a href="../view/komentare/'.$clanek["id"].'" title="Zobrazit komentáře">Zobrazit</a>
+                    </td>
+                    <td>
+                        '. Comments::getRating($clanek["id"])["rating"].'
+                    </td>
+                </tr>
+                
+            ';
+            }
+            ?>
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+<?php
+echo zaklad::spodek();
+
+?>
+
+

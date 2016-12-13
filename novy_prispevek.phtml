@@ -1,0 +1,117 @@
+<?php
+require("zaklad.php");
+require_once (dirname(__DIR__).'/kontrolery/SmerovacKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Novy_prispevekKontroler.php');
+require_once (dirname(__DIR__).'/kontrolery/Kontroler.php');
+session_start();
+$smer= new SmerovacKontroler();
+$smer->zkontroluj(array($_SERVER['REQUEST_URI']));
+$smer = new Novy_prispevekKontroler();
+echo zaklad::allIn();
+
+$error=null;
+$succ=null;
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+if(isset($_FILES['uploadfile'])){
+    $file_name = $_FILES['uploadfile']['name'];
+    $_SESSION["už zas-1"]=$file_name;
+    $file_size =$_FILES['uploadfile']['size'];
+    $file_tmp =$_FILES['uploadfile']['tmp_name'];
+    $file_type=$_FILES['uploadfile']['type'];
+    $file_ext=explode('.',$file_name);
+    $_SESSION["už zas0"]=$file_ext[0];
+    $_SESSION["už zas1"]=$file_ext[1];
+    $file_ext=end($file_ext);
+
+    $file_ext=strtolower($file_ext);
+
+    $expensions= "pdf";
+
+    if($file_ext !=$expensions){
+        $error="Jsou povoleny pouze soubory typu PDF.";
+    }
+
+
+    if(empty($error)){
+        $smer->novyPrispevek($_POST['name'],$_POST['desc'], $file_name);
+        move_uploaded_file($file_tmp,"../uploads/".$file_name);
+        $succ= "Úspěšně odesláno.";
+    }else{
+        //print_r($errors);
+    }
+}
+}
+/*if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $smer->novyPrispevek($_POST['name'],$_POST['desc'], $_POST['uploadfile']);
+    if(!empty($_SESSION['login'])){$error=null; $smer->prejdi("web2/view/uvod");/*Kontroler::presmeruj("uvod");*///}
+   // else{$error = "Soubor se nepodařilo odeslat.";}
+//}
+
+?>
+
+<html>
+<body>
+<div class="containerful">
+
+    <div class="content nopad">
+        <?php
+        echo zaklad::leveMenu();
+        ?>
+        <div id="staticcontent">
+
+
+            <h3>Nový příspěvek:</h3>
+
+                <div style = " border: solid 1px #333333; " align = "left">
+                    <div style = "background-color:#333333; color:#FFFFFF; padding:3px;"><b>Nový příspěvek:</b></div>
+
+                    <div style = "margin:10px">
+
+                        <form action = "" method = "post" enctype="multipart/form-data">
+                            <label>Název  <span class="required"></span>:</label><input type = "text" name = "name" class = "box"/><br /><br />
+                            <label>Popis  <span class="required"></span>:</label><input type = "text" name = "desc" class = "box" /><br/><br />
+                            <label>
+                                Soubor <span class="required"></span>:
+                                <span class="dropzone">
+                        <span class="nonselected">Soubor vyberete přetažením do této oblasti, nebo kliknutím</span>
+                        <span class="errorneous" style="display: none; color: red;">Vybraný soubor není platný dokument typu PDF</span>
+                        <span class="selected" style="display: none;">Vybraný soubor: <span></span></span>
+                        <input type="file" id="upload-file" name="uploadfile" />
+                    </span>
+
+                                <div class="pad_24"></div>
+
+                                <div class="row">
+                                    <div class="large-12 columns">
+                                        <span class="required"></span> - povinná položka
+                                        <input type="submit" class="button success float-right" name="save" value="Uložit a odeslat" />
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="submit_flag" />
+
+                            </label>
+
+
+                        </form>
+                        <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
+                        <div style = "font-size:11px; color:#ffff00; margin-top:10px"><?php echo $succ; ?></div>
+                    </div>
+
+                </div>
+
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+<?php
+echo zaklad::spodek();
+
+?>
+
+
