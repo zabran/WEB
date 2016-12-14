@@ -9,6 +9,8 @@ body, html
     height: 100%;
 }
 
+
+
 body
 {
     font-size: 10pt;
@@ -147,6 +149,8 @@ a.nodecor
 
 #header
 {
+    margin-left: -15px;
+    width: 103%;
     background-color: cadetblue;
     padding: 1em 1em 0 1.5em;
     height: 9em;
@@ -155,7 +159,8 @@ a.nodecor
 }
 #navmenu
 {
-    width: 100%;
+    margin-left: -15px;
+    width: 103%;
     height: 2em;
     background-color: #2ba6cb;
 
@@ -193,6 +198,7 @@ a.nodecor
 
 .userpanel
 {
+    margin-left: 0em;
     width: 14em;
     position: absolute;
     top: 1em;

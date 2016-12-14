@@ -20,8 +20,13 @@ class zaklad{
        <meta http-equiv=\"Content-language\" content=\"cs\">
        <meta name=\"robots\" content=\"index,follow\">
        <meta name=\"author\" content=\"zabran\">
+       <link href=\"/web2/css/bootstrap.css\" rel=\"stylesheet\" />
+       <link href=\"/web2/css/bootstrap.min.css\" rel=\"stylesheet\" />
+       <link href=\"/web2/css/bootstrap-theme.css\" rel=\"stylesheet\" />
+       <link href=\"/web2/css/bootstrap-theme.min.css\" rel=\"stylesheet\" />
        <link href=\"/web2/css/foundation.min.css\" rel=\"stylesheet\" />
        <link href=\"/web2/css/main.css\" rel=\"stylesheet\" />".
+
        "<title>"  .$titulek."</title>".
        '<meta name=\\"description\\" content=\\" ' .$popis. '\\" />
        <meta name=\\"keywords\\" content=\\"'. $klic. '\\"/>
@@ -73,6 +78,7 @@ class zaklad{
         '<body>'.'
     <div class="container">
         <div id="header">
+        
             <a href="../view/login" class="nodecor" title="Zpět na titulní stranu"><h1>Konference</h1></a>';
             if(!empty($_SESSION["login"])){
                 $prav = $_SESSION['rule']-1;

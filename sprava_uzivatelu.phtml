@@ -68,14 +68,14 @@ echo zaklad::allIn();
                             <option value="1">Čtenář</option>
                             <option value="2">Spisovatel</option>
                             <option value="3">Admin</option>
-                        </select><input type="submit" class="button success tiny" name="potvrdit" value="Potvrdit" /></td>
+                        </select><input type="submit" class="btn btn-xs btn-success" name="potvrdit" value="Potvrdit" /></td>
                         <input type = "hidden" name = "id" value="'. $user["id"].'" />
                         
                         </form>
                     <td>
                          <form action = "" method = "post">
                          <input type = "hidden" name = "id" value="'. $user["id"].'" />
-                <input type="submit" class="button" name="smazat" value="Smazat tohoto uživatele" />
+                <input type="submit" class="btn btn-danger" name="smazat" value="Smazat tohoto uživatele" />
                 </form>
                     </td>
                     

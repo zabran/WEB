@@ -53,6 +53,9 @@ class Articles extends Pripoj
         return self::getInsertId();
     }
 
+    /**Smaže článek a jeho komentáře.
+     * @param $id článku.
+     */
     public static function smaz($id){
         self::dotaz("delete from comment where article_id = ".$id." limit 1" );
         self::dotaz("delete from article where id =".$id." limit 1");

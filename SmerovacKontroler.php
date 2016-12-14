@@ -14,13 +14,9 @@ class SmerovacKontroler extends Kontroler
      */
     private function pomlckuj($text)
     {
-        $_SESSION["hej0"]= "$text";
         $veta = str_replace('-', ' ', $text);
-        $_SESSION["hej1"]= "$veta";
         $veta = ucwords($veta);
-        $_SESSION["hej2"]= "$veta";
         $veta = str_replace(' ', '', $veta);
-        $_SESSION["hej3"]= "$veta";
         return $veta;
     }
 
@@ -47,11 +43,8 @@ class SmerovacKontroler extends Kontroler
     public function prejdi($url){
         if(substr($url[0],0,1)=="/") {
             $url[0]=substr($url[0], 1);
-            $_SESSION["jsmeTam"]=$url[0];
         }
         $url = explode("/", $url);
-        $_SESSION["url0"]= "$url[0]";
-        $_SESSION["url1"]= "$url[1]";
 
         $i=0;
         $i2=1;
@@ -61,10 +54,10 @@ class SmerovacKontroler extends Kontroler
         }
         $url2 = $this->pomlckuj($url[$i2+1]);
         $tridaKontroleru = $url2 . "Kontroler";
-        $_SESSION["tridaKontroleru"]= $tridaKontroleru;
+        //$_SESSION["tridaKontroleru"]= $tridaKontroleru;
        /* if (file_exists('web2/kontrolery/' . $tridaKontroleru . '.php'))
 
-        {    */     $_SESSION["super"]= ('web2/kontrolery/' . $tridaKontroleru . '.php');
+        {    */    // $_SESSION["super"]= ('web2/kontrolery/' . $tridaKontroleru . '.php');
             $this->kontroler = new $tridaKontroleru;
             $this->kontroler->zpracuj($url);
             $this->data['titulek'] = $this->kontroler->hlavicka['titulek'];
@@ -96,7 +89,6 @@ class SmerovacKontroler extends Kontroler
         if(substr($url[0],0,1)=="/")
         {
             $url[0]=substr($url[0], 1);
-            $_SESSION["jsmeTam"]=$url[0];
         }
         $url2 = explode("/", $url[0]);
         $i=0;
@@ -110,8 +102,8 @@ class SmerovacKontroler extends Kontroler
         //if(iconv("utf-8", "us-ascii//TRANSLIT",$_SESSION["titulek"])!=$url3){
 
             $tridaKontroleru = $url3 . "Kontroler";
-            $_SESSION["tridaKontroleru"]= $tridaKontroleru;
-            $_SESSION["super"]= ('web2/kontrolery/' . $tridaKontroleru . '.php');
+           // $_SESSION["tridaKontroleru"]= $tridaKontroleru;
+            //$_SESSION["super"]= ('web2/kontrolery/' . $tridaKontroleru . '.php');
             $this->kontroler = new $tridaKontroleru;
             $this->kontroler->zpracuj($url2);
             $this->data['titulek'] = $this->kontroler->hlavicka['titulek'];
@@ -132,7 +124,6 @@ class SmerovacKontroler extends Kontroler
     public function zpracuj($parametry)
     {
         $naparsovanaURL = $this->parsujURL($parametry[0]);
-        $_SESSION["pars0"]= "$naparsovanaURL[0]";
 
         if (empty($naparsovanaURL[1])) {
             $url ='web2/view/login';
