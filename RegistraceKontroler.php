@@ -15,6 +15,7 @@ class RegistraceKontroler extends Kontroler
         $this->pohled = 'registrace';
     }
 
+    /*Zaragistruje uživatele.*/
     public function registrace($user, $pas, $mail){
         Users::registrace($user, $pas, $mail);
     }

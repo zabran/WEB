@@ -17,7 +17,7 @@ class Users extends Pripoj
      * @return první uživatel s tímto jménem.
      */
     public static function getByName($name){
-        return self::dotazJeden("select * from user where name = '".$name."'");
+        return self::dotazJeden("select * from user where name = :name", array(':name' => $name));
     }
 
     /**Vyzkouší, jestli uživatel je v databázi a připadně ho připojí do sessiony.
@@ -25,15 +25,12 @@ class Users extends Pripoj
      * @param $pass zadané heslo.
      */
     public static function login($name, $pass){
-        $dotaz ="select * from user where name = '".$name. "' and password = '".$pass."'";
-        $_SESSION['dotaz']=$dotaz;
-        $sql = self::dotaz($dotaz);
-        $_SESSION['sql']=$sql;
+        $dotaz ="select * from user where name = :name and password = :pass";
+        $sql = self::dotaz($dotaz, array(':name' => $name, ':pass' => $pass));
         //$count = $sql->rowCount();
         //$sql->fatch();
         if($sql ==1){
-            $sql=self::dotazJeden($dotaz);
-
+            $sql=self::dotazJeden($dotaz, array(':name' => $name, ':pass' => $pass));
             $_SESSION['login']=$sql['name'];
             $_SESSION['rule']=$sql['rules_id'];
         }
@@ -44,8 +41,8 @@ class Users extends Pripoj
      * @param $pass zadané heslo.
      */
     public static function registrace($name, $pass, $mail){
-        $dotaz ="select * from user where name = '".$name."' or email = '".$mail."'";
-        $sql = self::dotaz($dotaz);
+        $dotaz ="select * from user where name = :name or email = :mail";
+        $sql = self::dotaz($dotaz, array(':name' => $name, ':mail' => $mail));
         //$count = $sql->rowCount();
         //$sql->fatch();
         if($sql ==0){
@@ -65,8 +62,8 @@ class Users extends Pripoj
      * @return naposledy zadané id.
      */
     public static function insert($name, $pass, $mail, $rule =1){
-        self::dotaz("insert into user (`name`, `password`, `email`, `rules_id`) values ('".$name."', '".$pass
-            . "', '".$mail."', '".$rule."')");
+        self::dotaz("insert into user (`name`, `password`, `email`, `rules_id`) values (?,?,?,?)", array($name, $pass, $mail, $rule)/*('".$name."', '".$pass
+            . "', '".$mail."', '".$rule."')"*/);
 
         return self::getInsertId();
     }
@@ -76,7 +73,7 @@ class Users extends Pripoj
      * @return pole uživatelé s danými právy.
      */
     public static function getAllWithRule($rule){
-        return self::dotazVsechny("select * from user where rule_id = " .$rule);
+        return self::dotazVsechny("select * from user where rule_id = :rule", array(':rule' => $rule));
     }
 
     /**Přenastaví práva uživatele.
@@ -84,7 +81,7 @@ class Users extends Pripoj
      * @param $rule nová práva uživatele.
      */
     public static function setRule($id , $rule){
-        self::dotaz("UPDATE user SET rules_id = '".$rule."' WHERE id = ".$id." limit 1");
+        self::dotaz("UPDATE user SET rules_id = :rule WHERE id = :id limit 1", array(':id' => $id, ':rule' => $rule));
     }
 
     /**Přenastaví jméno uživatele.
@@ -92,7 +89,7 @@ class Users extends Pripoj
      * @param $rule nové jméno uživatele.
      */
     public static function setName($id , $name){
-        self::dotaz("UPDATE user SET `name` = '".$name."' WHERE id = ".$id." limit 1");
+        self::dotaz("UPDATE user SET `name` = :name WHERE id = :id limit 1", array(':id' => $id, ':name' => $name));
     }
 
     /**Přenastaví heslo uživatele.
@@ -100,6 +97,6 @@ class Users extends Pripoj
      * @param $rule nové heslo uživatele.
      */
     public static function setPass($id , $pas){
-        self::dotaz("UPDATE user SET password = '".$pas."' WHERE id = ".$id." limit 1");
+        self::dotaz("UPDATE user SET password = :pas WHERE id = :id limit 1", array(':id' => $id, ':pas' => $pas));
     }
 }

@@ -14,6 +14,7 @@ class AboutKontroler extends Kontroler
         $this->pohled = 'about';
     }
 
+    /*Změní uživatela pravidla na 2 pokud má 1.*/
     public function update(){
         if($_SESSION["rule"]==1){
             $user = Users::getByName($_SESSION["login"]);

@@ -15,19 +15,22 @@ class Sprava_uzivateluKontroler extends Kontroler
         $this->pohled = 'sprava_uzivatelu';
     }
 
+    /*Vrátí všechny uživatele.*/
     public function getUzivatele(){
         if($_SESSION["rule"]==3){
            return $this->osetri(Users::getAll());
         }
     }
 
+    /*Nastaví uživateli práva.*/
     public function setRule($id, $rule){
         if($_SESSION["rule"]==3){
-            Users::setRule($id, $rule);
+            Users::setRule($id+0, $rule);
         }
     }
     //TODO
-    public function smazUzivatele($id){
+    /*Smaže uživatele. Ze strukturních důvodů neimplementováno.*/
+    public function smaz($id){
 
     }
 }

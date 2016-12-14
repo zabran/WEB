@@ -15,6 +15,7 @@ class LoginKontroler extends Kontroler
         $this->pohled = 'login';
     }
 
+    /*Pokusí se nalogovat uživatele.*/
     public function login($user, $pas){
         Users::login($user, $pas);
     }

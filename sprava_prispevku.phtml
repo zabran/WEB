@@ -35,6 +35,7 @@ echo zaklad::allIn();
                 <thead>
                 <tr>
                     <th>Název</th>
+                    <th>Autor</th>
                     <th>Komentáře</th>
                     <th>Smazat</th>
                     <th>Rating</th>
@@ -42,9 +43,9 @@ echo zaklad::allIn();
                 </thead>
                 <tbody>
                 <?php  foreach ($sql as $clanek){
-                    $_SESSION["komentáře"]='komentare/?id='.$clanek["id"];
                     echo '<tr>
                     <td>'. $clanek["clanek"].'</td>
+                    <td>'. $clanek["user"].'</td>
                     <td>
                         <a href="../view/komentare/'.$clanek["id"].'" title="Zobrazit komentáře">Zobrazit</a>
                     </td>

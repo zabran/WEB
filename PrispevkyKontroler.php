@@ -16,15 +16,17 @@ class PrispevkyKontroler extends Kontroler
         $this->pohled = 'prispevky';
     }
 
+    /*Vrátí všechny články.*/
     public function getClanky(){
         if($_SESSION["rule"]>1)
         {return $this->osetri(Articles::getAll());}
         //else error;
     }
 
+    /*Vrátí hodnocení článku.*/
     public function getRating($id){
         if($_SESSION["rule"]>1)
-        {return $this->osetri(Comments::getRating($id));}
+        {return $this->osetri(Comments::getRating($id+0));}
         //else error;
     }
 }

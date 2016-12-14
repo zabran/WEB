@@ -8,7 +8,7 @@ class Articles extends Pripoj
      * @return všechny články s id, jménem, uživatelem, který je napsal, popisem a jejich souborem.
      * .*/
     public static function getAll($count = 100){
-        return self::dotazVsechny("select a.id as id, a.name as 'clanek', u.name as 'user', a.desc, a.file from article a, user u where u.id = a.user_id group by a.id, u.id limit " .$count);
+        return self::dotazVsechny("select a.id as id, a.name as 'clanek', u.name as 'user', a.desc, a.file from article a, user u where u.id = a.user_id group by a.id, u.id limit " .($count+0));
     }
 
     /**Vrací jeden článek podle id.
@@ -16,7 +16,7 @@ class Articles extends Pripoj
      * @return vracený článek.
      */
     public static function getByID($id){
-        return self::dotazJeden("select a.id as id, a.name as 'clanek', u.name as 'user', a.desc, a.file from article a, user u where u.id = a.user_id and a.id = ".$id." group by a.id, u.id");
+        return self::dotazJeden("select a.id as id, a.name as 'clanek', u.name as 'user', a.desc, a.file from article a, user u where u.id = a.user_id and a.id = :id group by a.id, u.id", array(':id' => $id));
     }
 
     /**Vrací články pro čtenáře (s ratingem větším než 20).
@@ -24,7 +24,7 @@ class Articles extends Pripoj
      * @return články pro čtenáře.
      */
     public static function getForViewers($count = 100){
-        $sql = self::dotazVsechny("select a.id as id, a.name as 'clanek', u.name as 'user', sum(value)/count(value) as 'rating', a.desc, a.file from article a, comments c, user u where a.id = c.article_id and u.id = a.user_id group by a.id having sum(value)/count(value)>=20 order by sum(value)/count(value) desc limit " .$count);
+        $sql = self::dotazVsechny("select a.id as id, a.name as 'clanek', u.name as 'user', sum(value)/count(value) as 'rating', a.desc, a.file from article a, comments c, user u where a.id = c.article_id and u.id = a.user_id group by a.id having sum(value)/count(value)>=20 order by sum(value)/count(value) desc limit " .($count+0));
 
         return $sql;
     }
@@ -35,7 +35,7 @@ class Articles extends Pripoj
      * @return články uživatele.
      */
     public static function getByUser($id, $count = 100){
-        return self::dotazVsechny("select a.id as id, a.name as 'clanek', u.name as 'user', a.desc, a.file from article a, user u where  u.id = a.user_id and u.id = ".$id." limit " .$count);
+        return self::dotazVsechny("select a.id as id, a.name as 'clanek', u.name as 'user', a.desc, a.file from article a, user u where  u.id = a.user_id and u.id = :id limit " .($count+0), array(':id' => $id));
     }
 
     /**Vložení článku do databáze.
@@ -47,8 +47,8 @@ class Articles extends Pripoj
      */
     public static function insert($user_id , $name, $desc, $file){
         self::dotaz("insert into article (`user_id`, `name`, `desc`, `file`, `time`)"
-            . " values ('".$user_id."', '".$name."', '".$desc
-            . "', '".$file."', '".date('Y-m-d H:i:s')."')");
+            . " values (?,?,?,?,?)", array($user_id, $name, $desc, $file, date('Y-m-d H:i:s'))/*('".$user_id."', '".$name."', '".$desc
+            . "', '".$file."', '".date('Y-m-d H:i:s')."')"*/);
 
         return self::getInsertId();
     }
@@ -57,8 +57,8 @@ class Articles extends Pripoj
      * @param $id článku.
      */
     public static function smaz($id){
-        self::dotaz("delete from comment where article_id = ".$id." limit 1" );
-        self::dotaz("delete from article where id =".$id." limit 1");
+        self::dotaz("delete from comment where article_id = :id", array(':id' => $id) );
+        self::dotaz("delete from article where id =:id limit 1", array(':id' => $id));
 }
 
 }

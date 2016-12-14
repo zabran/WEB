@@ -23,7 +23,7 @@ class ClankyKontroler extends Kontroler
         $this->pohled = 'clanky';
     }
 
-    /**
+    /**Vrací články pro čtenáře.
      * @return články
      */
     public function getClanky(){
@@ -32,13 +32,13 @@ class ClankyKontroler extends Kontroler
         //else error;
     }
 
-    /**
+    /**Vrací rating článku.
      * @param $id
      * @return mixed
      */
     public function getRating($id){
         if($_SESSION["rule"]>0)
-        {return $this->osetri(Comments::getRating($id));}
+        {return $this->osetri(Comments::getRating($id+0));}
         //else error;
     }
 }

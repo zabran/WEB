@@ -16,13 +16,14 @@ class Novy_prispevekKontroler extends Kontroler
         $this->pohled = 'novy_prispevek';
     }
 
+    /*Vloží článek do databáze.*/
     public function novyPrispevek($name, $desc, $file){
         if($_SESSION["rule"]>1){
 
             $user = Users::getByName($_SESSION["login"]);
             $id = $user["id"];
             $_SESSION["namicko"]=$id;
-            Articles::insert($id, $name, $desc, $file);
+            Articles::insert($id+0, $name, $desc, $file);
         }
     }
 
